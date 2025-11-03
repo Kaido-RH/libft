@@ -6,13 +6,13 @@
 /*   By: ahrahmou <ahrahmou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 13:43:56 by ahrahmou          #+#    #+#             */
-/*   Updated: 2025/10/28 14:00:51 by ahrahmou         ###   ########.fr       */
+/*   Updated: 2025/10/30 11:57:58 by ahrahmou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	count_words(char const *s)
+int	count_words(char const *s, char c)
 {
 	int	i;
 	int	words;
@@ -21,19 +21,79 @@ int	count_words(char const *s)
 	words = 0;
 	while (s[i])
 	{
-		if (s[i] != ' ')
+		while (s[i] == c)
 			i++;
-		words = words + 1;
+		if (s[i])
+		{
+			words++;
+			while (s[i] && s[i] != c)
+				i++;
+		}
 	}
 	return (words);
 }
 
-/*char	**ft_split(char const *s, char c)
+void	*free_split(char **arr, int i)
 {
-	char 
-*/
-int main(){
-	char s[] = "ahmed rahmouni";
-	int i = count_words(s);
-	printf("%d",i);
+	int	j;
+
+	j = 0;
+	if (!arr)
+		return (NULL);
+	while (j < i)
+	{
+		free(arr[j]);
+		j++;
+	}
+	free(arr);
+	return (NULL);
+}
+
+char	*fill_split(char const *s, char c)
+{
+	int		i;
+	int		len;
+	char	*str;
+
+	i = 0;
+	len = 0;
+	while (s[len] && s[len] != c)
+		len++;
+	str = malloc(sizeof(char) * (len + 1));
+	if (!str)
+		return (NULL);
+	while (i < len)
+	{
+		str[i] = s[i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
+}
+
+char	**ft_split(char const *s, char c)
+{
+	char	**arr;
+	int		i;
+
+	i = 0;
+	arr = malloc((count_words(s, c) + 1) * sizeof(char *));
+	if (!arr)
+		return (NULL);
+	while (*s)
+	{
+		while (*s && *s == c)
+			s++;
+		if (*s)
+		{
+			arr[i] = fill_split(s, c);
+			if (!arr[i])
+				return (free_split(arr, i));
+			i++;
+			while (*s && *s != c)
+				s++;
+		}
+	}
+	arr[i] = NULL;
+	return (arr);
 }
