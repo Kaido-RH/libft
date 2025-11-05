@@ -62,12 +62,11 @@ all: $(NAME)
 
 %.o: %.c libft.h   
 	$(CC) $(CFLAGS) -c $< -o $@
+	$(AR) $(NAME) $@
 
 $(NAME): $(OBJECTS)
-	$(AR) $(NAME) $(OBJECTS)
 
 bonus: $(OBJECTS_BONUS)
-	$(AR) $(NAME) $(OBJECTS_BONUS)
 
 clean:
 	rm -f $(OBJECTS) $(OBJECTS_BONUS)
